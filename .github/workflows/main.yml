@@ -1,0 +1,36 @@
+name: Push To Azure Web
+on:
+  push:
+    branches: [ main ]
+ 
+  workflow_dispatch:
+  
+env:
+  WEB_APP_NAME: azure-demos-serverless-web
+  WEB_APP_CSPROJ: ./src/AzureServerlessDemo.Web/AzureServerlessDemo.Web/AzureServerlessDemo.Web.csproj
+  WEB_APP_DOTNET_VERSION: 6.0.x    
+
+jobs:
+  build-push-to-azure-web-app:
+    runs-on: ubuntu-latest
+    steps:         
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core SDK ${{env.WEB_APP_DOTNET_VERSION}}
+        uses: actions/setup-dotnet@v1.8.0
+        with:
+          dotnet-version: ${{env.WEB_APP_DOTNET_VERSION}}
+          
+      - name: Build with dotnet on ${{env.WEB_APP_CSPROJ}}
+        run: dotnet build --configuration Release ${{env.WEB_APP_CSPROJ}}    
+
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/webapp ${{env.WEB_APP_CSPROJ}}
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+         app-name: ${{ env.WEB_APP_NAME }}  
+         slot-name: 'production'
+         publish-profile: ${{ secrets.PP_WEB }}
+         package:  ${{env.DOTNET_ROOT}}/webapp
