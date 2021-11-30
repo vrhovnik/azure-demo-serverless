@@ -5,6 +5,12 @@ VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureServerlessDemo.Web", "AzureServerlessDemo.Web\AzureServerlessDemo.Web.csproj", "{F2791A2C-C400-42FF-8B30-B850D900DEA4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{15E48BA7-65B7-48C8-A6FF-4A16DAB55BBF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Func", "Func", "{B6B471D7-7F49-4A26-AE2B-03CC9AB5DFB5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{551DD2F0-8D4F-439B-BEC5-25402E00E57F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,5 +27,8 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7D17083A-2516-49F4-A562-CC76C247BF6D}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F2791A2C-C400-42FF-8B30-B850D900DEA4} = {15E48BA7-65B7-48C8-A6FF-4A16DAB55BBF}
 	EndGlobalSection
 EndGlobal
