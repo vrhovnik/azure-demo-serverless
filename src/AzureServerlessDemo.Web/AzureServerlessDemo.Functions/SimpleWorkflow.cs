@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -31,18 +30,13 @@ public static class SimpleWorkflow
             var messageBody = "<h1>Please check your profile data and let us know, if any questions</h1>";
             if (!string.IsNullOrEmpty(message))
             {
-                switch (messageBody)
+                messageBody = messageBody switch
                 {
-                    case "data":
-                        messageBody = "<h1>Please check your portal as we brought to you new features</h1>";
-                        break;
-                    case "info":
-                        messageBody = "<h1>You have used your quota to the fullest. Increase to max to get service working.</h1>";
-                        break;
-                    default:
-                        messageBody = "<p>Please call us to explain the products</p>";
-                        break;
-                }
+                    "data" => "<h1>Please check your portal as we brought to you new features</h1>",
+                    "info" =>
+                        "<h1>You have used your quota to the fullest. Increase to max to get service working.</h1>",
+                    _ => "<p>Please call us to explain the products</p>"
+                };
             }
             
             var stopwatch = Stopwatch.StartNew();
