@@ -1,0 +1,28 @@
+﻿@page
+@model AzureServerlessDemo.Web.Pages.Triggers.WorkflowPageModel
+
+@{
+    ViewData["Title"] = "Workflow data";
+}
+
+<h1>Workflow loaded</h1>
+
+<p>Click on below items to test out functionalities of trigger based serverless options</p>
+
+<button hx-get="@Model.SimpleWorkflowUrl">
+    Send information about the usage to users
+    <img alt="Spinner to showcase result in timely matter to get data"
+         class="htmx-indicator"
+         src="./spinners/spinner.svg" />
+</button>
+
+<p>
+    Spinners are from <a href="https://github.com/SamHerbert/SVG-Loaders">https://github.com/SamHerbert/SVG-Loaders</a>.
+</p>
+
+@section Scripts
+{
+    <script crossorigin="anonymous"
+            integrity="sha384-tvG/2mnCFmGQzYC1Oh3qxQ7CkQ9kMzYjWZSNtrRZygHPDDqottzEJsqS4oUVodhW"
+            src="https://unpkg.com/htmx.org@1.6.1"></script>
+}
