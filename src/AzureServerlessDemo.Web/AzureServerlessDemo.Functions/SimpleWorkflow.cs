@@ -16,7 +16,7 @@ public static class SimpleWorkflow
 {
     [FunctionName("SimpleWorkflow")]
     public static async Task<IActionResult> RunAsync(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "{message}")]
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "sendcontacts/{message}")]
         HttpRequest req, string message, ILogger log)
     {
         log.LogInformation("Simple workflow to prepare message and then send an email to all of our subscribers");
