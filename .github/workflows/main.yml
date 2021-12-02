@@ -1,4 +1,4 @@
-name: Push To Azure Web
+name: Push To Azure Web and functions
 on:
   push:
     branches: [ main ]
@@ -9,7 +9,10 @@ env:
   WEB_APP_NAME: azure-demos-serverless-web
   WEB_APP_CSPROJ: ./src/AzureServerlessDemo.Web/AzureServerlessDemo.Web/AzureServerlessDemo.Web.csproj
   WEB_APP_DOTNET_VERSION: 6.0.x    
-
+  AZURE_FUNCTIONAPP_NAME: azure-demo-serverless  
+  AZURE_FUNCTIONAPP_APP_CSPROJ: ./src/AzureServerlessDemo.Web/AzureServerlessDemo.Functions/AzureServerlessDemo.Functions.csproj    
+  FUNC_DOTNET_VERSION: 6.0.x
+  
 jobs:
   build-push-to-azure-web-app:
     runs-on: ubuntu-latest
@@ -34,3 +37,24 @@ jobs:
          slot-name: 'production'
          publish-profile: ${{ secrets.PP_WEB }}
          package:  ${{env.DOTNET_ROOT}}/webapp
+         
+  build-push-to-azure-func-app:
+    runs-on: windows-latest    
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@master
+
+    - name: Setup DotNet Core ${{ env.FUNC_DOTNET_VERSION }} 
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ env.FUNC_DOTNET_VERSION  }}
+
+    - name: dotnet publish for ${{env.AZURE_FUNCTIONAPP_APP_CSPROJ}}
+      run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/webapp ${{env.AZURE_FUNCTIONAPP_APP_CSPROJ}}
+        
+    - name: Run Azure Functions Action on ${{ env.AZURE_FUNCTIONAPP_NAME }}
+      uses: Azure/functions-action@v1      
+      with:
+        app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+        package: ${{env.DOTNET_ROOT}}/webapp
+        publish-profile: ${{ secrets.FUNC_PP }}
