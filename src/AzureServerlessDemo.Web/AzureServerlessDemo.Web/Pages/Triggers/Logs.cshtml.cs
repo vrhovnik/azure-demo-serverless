@@ -1,4 +1,5 @@
-﻿using AzureServerlessDemo.Core;
+﻿using Azure.Data.Tables;
+using AzureServerlessDemo.Core;
 using AzureServerlessDemo.Web.Options;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -17,12 +18,22 @@ public class LogsPageModel : PageModel
         this.logger = logger;
     }
 
-    public void OnGet()
+    public async Task OnGetAsync()
     {
         logger.LogInformation("Loaded page LogsPageModel with storage options");
         logger.LogInformation($"Conn string: {storageOptions.ConnectionString} on table {storageOptions.TableName}");
+        
+        var client = new TableClient(storageOptions.ConnectionString, storageOptions.TableName);
+        await client.CreateIfNotExistsAsync();
+        
+        var queryTableResults = client.QueryAsync<LogModel>($"TableName eq '{storageOptions.TableName}'");
+        
+        Console.WriteLine("The following are the names of the tables in the query result:");
+        await foreach (var currentResult in queryTableResults)
+        {
+            Logs.Add(currentResult);
+        }
     }
 
-    [BindProperty]
-    public List<LogModel> Logs { get; set; } = new();
+    [BindProperty] public List<LogModel> Logs { get; } = new();
 }

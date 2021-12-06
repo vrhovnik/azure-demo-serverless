@@ -14,4 +14,8 @@
     <ProjectReference Include="..\AzureServerlessDemo.Core\AzureServerlessDemo.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Azure.Data.Tables" Version="12.3.0" />
+  </ItemGroup>
+
 </Project>

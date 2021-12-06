@@ -1,10 +1,21 @@
-﻿namespace AzureServerlessDemo.Core;
+﻿using Azure;
+using Azure.Data.Tables;
 
-public class LogModel
+namespace AzureServerlessDemo.Core;
+
+public class LogModel : ITableEntity
 {
+    public LogModel()
+    {
+        PartitionKey = "serverlesslogs";
+        RowKey = Guid.NewGuid().ToString();
+    }
+
     public string PartitionKey { get; set; }
     public string RowKey { get; set; }
-    public string Text { get; set; }
-    public DateTime LoggedDate { get; set; }
-    public string CalledFromMethod { get; set; }
+    public DateTimeOffset? Timestamp { get; set; }
+    public ETag ETag { get; set; }
+    public string Text { get; set; } = string.Empty;
+    public DateTime LoggedDate { get; set; } = DateTime.Now;
+    public string CalledFromMethod { get; set; } =  string.Empty;
 }
