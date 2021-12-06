@@ -15,7 +15,7 @@
 
 <h1>Logs from Azure Tables</h1>
 
-TODO: add search form
+<div id="alertDiv"></div>
 
 @if (Model.Logs.Any())
 {
@@ -40,4 +40,31 @@ TODO: add search form
 else
 {
     <p class="text-info"> No data is present, check Azure Table storage connection!</p>
+}
+
+@section Scripts
+{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.7/signalr.min.js"></script>
+    <script type="application/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+             const connectionAlerts = new signalR.HubConnectionBuilder()
+                         .withUrl('/alerts')
+                         .configureLogging(signalR.LogLevel.Information)
+                         .withAutomaticReconnect()
+                         .build();
+             bindConnectionMessage(connectionAlerts);
+             connectionAlerts.start()
+                            .then(() => console.log('connected to alert messages!'))
+                            .catch(console.error);
+             function bindConnectionMessage(connection) {
+                 let messageCallback = function (message) {
+                     $("#alertDiv").empty();
+                     if (!message) return;
+                     $("#alertDiv").append(message);
+                     $("#alertDiv").append("<br />");                     
+                 };
+                 connection.on('alertMessage', messageCallback);
+             }
+         });
+    </script>
 }
