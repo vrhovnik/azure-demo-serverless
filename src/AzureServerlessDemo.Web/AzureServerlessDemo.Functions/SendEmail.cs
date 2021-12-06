@@ -3,7 +3,6 @@ using System;
 using AzureServerlessDemo.Core;
 using AzureServerlessDemo.Functions.Models;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SendGrid.Helpers.Mail;
