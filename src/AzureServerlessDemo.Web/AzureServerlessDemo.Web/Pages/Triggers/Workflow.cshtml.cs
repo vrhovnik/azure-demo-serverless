@@ -14,10 +14,22 @@ public class WorkflowPageModel : PageModel
 
     public void OnGet()
     {
-        logger.LogInformation("Page WorkflowPageModel loaded");
+        logger.LogInformation("Page WorkflowPageModel loaded, loading environment variables");
+        
         SimpleWorkflowUrl = Environment.GetEnvironmentVariable("SimpleWorkflowUrl");
+        logger.LogInformation("Simple: " + SimpleWorkflowUrl);
+        EnhancedWorkflowUrl = Environment.GetEnvironmentVariable("EnhancedWorkflowUrl");
+        logger.LogInformation("Enhanced: " + EnhancedWorkflowUrl);
+        TighterIntegration = Environment.GetEnvironmentVariable("TighterIntegration");
+        logger.LogInformation("Tighter: " + TighterIntegration);
     }
     
     [BindProperty]
-    public string SimpleWorkflowUrl { get; set; }
+    public string SimpleWorkflowUrl { get; set; } 
+    
+    [BindProperty]
+    public string EnhancedWorkflowUrl { get; set; }
+    
+    [BindProperty]
+    public string TighterIntegration { get; set; }
 }

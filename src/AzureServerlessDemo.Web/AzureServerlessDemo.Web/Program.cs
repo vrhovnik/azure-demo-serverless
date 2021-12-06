@@ -1,10 +1,13 @@
+using AzureServerlessDemo.Web.Options;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages()
     .AddRazorPagesOptions(options =>
-                    options.Conventions.AddPageRoute("/Info/Index", ""));
+        options.Conventions.AddPageRoute("/Info/Index", ""));
 
 builder.Services.AddHealthChecks();
+builder.Services.Configure<StorageOptions>(builder.Configuration.GetSection("StorageOptions"));
 
 var app = builder.Build();
 

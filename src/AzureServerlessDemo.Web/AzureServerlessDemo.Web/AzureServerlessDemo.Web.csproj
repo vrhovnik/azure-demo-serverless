@@ -10,4 +10,8 @@
     <_ContentIncludedByDefault Remove="Pages\HttpApi\WithoutRouting.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AzureServerlessDemo.Core\AzureServerlessDemo.Core.csproj" />
+  </ItemGroup>
+
 </Project>
