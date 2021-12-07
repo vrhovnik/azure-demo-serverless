@@ -9,6 +9,7 @@ builder.Services.AddRazorPages()
 
 builder.Services.AddSignalR().AddAzureSignalR();
 builder.Services.AddHealthChecks();
+builder.Services.AddControllers();
 builder.Services.Configure<StorageOptions>(builder.Configuration.GetSection("StorageOptions"));
 
 var app = builder.Build();
