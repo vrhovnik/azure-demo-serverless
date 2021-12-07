@@ -12,7 +12,7 @@ namespace AzureServerlessDemo.Functions;
 public static class SendEmail
 {
     [FunctionName("SendEmail")]
-    public static async Task RunAsync([QueueTrigger("azure-serverless-emails", Connection = "")] string emailObject, 
+    public static async Task RunAsync([QueueTrigger("serverlessemails")] string emailObject, 
         [SendGrid(ApiKey = "SendGridApiKey")]IAsyncCollector<SendGridMessage> messageCollector,
         [Table("serverlesslogs")]IAsyncCollector<LogModel> tableCollector,
         ILogger log)
