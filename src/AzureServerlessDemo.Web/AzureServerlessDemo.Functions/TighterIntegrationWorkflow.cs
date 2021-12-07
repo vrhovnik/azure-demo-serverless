@@ -23,7 +23,7 @@ public static class TighterIntegrationWorkflow
         HttpRequest req,
         string message,
         [Queue("serverlessemails")] IAsyncCollector<CloudQueueMessage> emailCollector,
-        [Table("serverlesslogs")] IAsyncCollector<LogModel> tableCollector,
+        [Table("serverlesslogs")] IAsyncCollector<LogTableModel> tableCollector,
         [EventGrid(TopicEndpointUri = "EventGridNotificationEndpoint", TopicKeySetting = "EventGridKey")]
         IAsyncCollector<EventGridEvent> eventCollector,
         ILogger log)
@@ -40,8 +40,10 @@ public static class TighterIntegrationWorkflow
 
             log.LogInformation("Addding data to Azure Tables for log purposes");
 
-            var logItem = new LogModel
+            var logItem = new LogTableModel
             {
+                PartitionKey = "serverlesslogs",
+                RowKey = Guid.NewGuid().ToString(),
                 Text = $"Calling tighter integration workflow with {message}",
                 CalledFromMethod = "TighterIntegrationWorkflow",
                 LoggedDate = DateTime.Now
