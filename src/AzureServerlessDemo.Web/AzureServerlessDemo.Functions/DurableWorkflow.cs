@@ -22,7 +22,6 @@ public static class DurableWorkflow
         };
 
         return outputs;
-        
     }
 
     [FunctionName("DurableWorkflow_PrepareMessage")]
