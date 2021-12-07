@@ -31,8 +31,8 @@ public class LogsPageModel : PageModel
         var client = new TableClient(storageOptions.ConnectionString, storageOptions.TableName);
         await client.CreateIfNotExistsAsync();
         
-        var queryTableResults = client.QueryAsync<LogModel>($"TableName eq '{storageOptions.TableName}'");
-        
+        var queryTableResults = client.QueryAsync<LogModel>($"PartitionKey eq 'serverlesslogs'");
+
         await foreach (var currentResult in queryTableResults)
         {
             Logs.Add(currentResult);
