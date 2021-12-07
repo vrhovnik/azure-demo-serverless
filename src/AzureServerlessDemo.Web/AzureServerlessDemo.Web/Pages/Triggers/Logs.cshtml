@@ -7,13 +7,13 @@
 
 @section breadcrumbs
 {
-    <li>
+    <li class="breadcrumb-item">
         <a asp-page="/Info/Index">Starting page</a>
     </li>
-    <li>
+    <li class="breadcrumb-item">
         <a asp-page="/Triggers/Workflow">Triggers</a>
     </li>
-    <li class="active">Logs from Azure tables</li>
+    <li class="breadcrumb-item active">Logs from Azure tables</li>
 }
 
 <h1>Logs from Azure Tables</h1>
@@ -54,7 +54,7 @@
     <script type="application/javascript">
         document.addEventListener('DOMContentLoaded', function () {
              const connectionAlerts = new signalR.HubConnectionBuilder()
-                         .withUrl(@Model.FunctionURL)
+                         .withUrl('@Model.FunctionURL')
                          .configureLogging(signalR.LogLevel.Information)                         
                          .build();
              
@@ -63,7 +63,7 @@
                             .catch(console.error);
              
              connection.on('newMessage', (message) => {
-                     document.getElementById("messages").innerHTML = message;
+                     document.getElementById("alertDiv").innerHTML = message;
                    });
          });
     </script>
