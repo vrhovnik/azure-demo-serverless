@@ -29,25 +29,33 @@ public class AlertController : ControllerBase
     public async Task<IActionResult> NotifyWebPageWithSignalR()
     {
         logger.LogInformation("Reading from body");
-        EventGridEvent[] egEvents = EventGridEvent.ParseMany(BinaryData.FromStream(HttpContext.Request.Body));
-        logger.LogInformation("Got events - check if validation code is present");
-        foreach (var eventGridEvent in egEvents)
+        try
         {
-            if (eventGridEvent.TryGetSystemEventData(out object systemEvent) &&
-                systemEvent is SubscriptionValidationEventData subscriptionValidated)
+            EventGridEvent[] egEvents = EventGridEvent.ParseMany(BinaryData.FromStream(HttpContext.Request.Body));
+            logger.LogInformation("Got events - check if validation code is present");
+            foreach (var eventGridEvent in egEvents)
             {
-                logger.LogInformation("Validation code: " + subscriptionValidated.ValidationCode);
-                var responseData =
-                    new SubscriptionValidationResponseData
-                        { ValidationResponse = subscriptionValidated.ValidationCode };
-                return Ok(JsonConvert.SerializeObject(responseData));
-            }
+                if (eventGridEvent.TryGetSystemEventData(out object systemEvent) &&
+                    systemEvent is SubscriptionValidationEventData subscriptionValidated)
+                {
+                    logger.LogInformation("Validation code: " + subscriptionValidated.ValidationCode);
+                    var responseData =
+                        new SubscriptionValidationResponseData
+                            { ValidationResponse = subscriptionValidated.ValidationCode };
+                    return Ok(JsonConvert.SerializeObject(responseData));
+                }
             
-            logger.LogInformation("Reading data property " + eventGridEvent.Data);
-            await hubContext.Clients.All.SendAsync("alertMessage", eventGridEvent.Data.ToString());    
-        }
+                logger.LogInformation("Reading data property " + eventGridEvent.Data);
+                await hubContext.Clients.All.SendAsync("alertMessage", eventGridEvent.Data.ToString());    
+            }
 
-        logger.LogInformation("Done calling events from NotifyWebPageWithSignalR");
-        return Ok($"Data was received at {DateTime.Now} and all clients has been notified.");
+            logger.LogInformation("Done calling events from NotifyWebPageWithSignalR");
+            return Ok($"Data was received at {DateTime.Now} and all clients has been notified.");
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e.Message);
+            return BadRequest(e.Message);
+        }
     }
 }
