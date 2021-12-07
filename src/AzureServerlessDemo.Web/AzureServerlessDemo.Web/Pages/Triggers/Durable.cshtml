@@ -1,0 +1,68 @@
+﻿@page
+@model AzureServerlessDemo.Web.Pages.Triggers.DurablePageModel
+
+@{
+    ViewData["Title"] = "Durable function workflow";
+}
+
+<h1>
+    Durable workflow
+</h1>
+
+<p>Click on below items to test out functionalities for durable functions</p>
+<div class="row row-cols-3 row-cols-md-3 g-4">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Simple durable workflow</h5>
+                <p class="card-text">Do simple durable workflow</p>
+                <button class="btn btn-primary"
+                        hx-get="@Model.SimpleDurableUrl"
+                        hx-indicator="#indicatorSimple"
+                        hx-swap="innerHTML">
+                    Execute durable workflowe
+                </button>
+                <img alt="Spinner to showcase result in timely matter to get data"
+                     class="htmx-indicator"
+                     id="indicatorSimple"
+                     src="~/spinners/spinner.svg" />
+            </div>
+            <div class="card-footer">
+                <small class="text-muted">Function URL: @Model.SimpleDurableUrl</small>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Fan out workflow</h5>
+                <p class="card-text">Demonstrate fan out / in approach</p>
+                <button class="btn btn-primary"
+                        hx-get="@Model.FanInOutDurableUrl"
+                        hx-indicator="#indicatorEnhanced"
+                        hx-swap="innerHTML">
+                    Execute fan in/out sample
+                </button>
+                <img alt="Spinner to showcase result in timely matter to get data"
+                                     class="htmx-indicator"
+                                     id="indicatorEnhanced"
+                                     src="~/spinners/spinner.svg" />
+            </div>
+            <div class="card-footer">
+                <small class="text-muted">Function URL: @Model.FanInOutDurableUrl</small>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<p class="text-info mt-3">
+    Spinners are from <a href="https://github.com/SamHerbert/SVG-Loaders">https://github.com/SamHerbert/SVG-Loaders</a>.
+</p>
+
+@section Scripts
+{
+    <script crossorigin="anonymous"
+            integrity="sha384-tvG/2mnCFmGQzYC1Oh3qxQ7CkQ9kMzYjWZSNtrRZygHPDDqottzEJsqS4oUVodhW"
+            src="https://unpkg.com/htmx.org@1.6.1"></script>
+}
