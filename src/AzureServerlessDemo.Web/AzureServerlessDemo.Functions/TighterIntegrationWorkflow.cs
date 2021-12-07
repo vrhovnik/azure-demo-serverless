@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Azure.Messaging;
 using Azure.Messaging.EventGrid;
 using AzureServerlessDemo.Core;
 using AzureServerlessDemo.Functions.Models;

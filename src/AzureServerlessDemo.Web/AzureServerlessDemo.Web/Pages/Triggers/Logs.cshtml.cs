@@ -22,8 +22,12 @@ public class LogsPageModel : PageModel
     public async Task<IActionResult> OnGetAsync(string query)
     {
         logger.LogInformation("Loaded page LogsPageModel with storage options");
-        logger.LogInformation($"Conn string: {storageOptions.ConnectionString} on table {storageOptions.TableName}");
         
+        FunctionURL = Environment.GetEnvironmentVariable("FunctionURL");
+        logger.LogInformation("Function URL is " + FunctionURL);
+        
+        logger.LogInformation($"Conn string for Azure Table {storageOptions.ConnectionString} on table {storageOptions.TableName}");
+
         var client = new TableClient(storageOptions.ConnectionString, storageOptions.TableName);
         await client.CreateIfNotExistsAsync();
         
@@ -46,4 +50,5 @@ public class LogsPageModel : PageModel
     }
 
     [BindProperty] public List<LogModel> Logs { get; set; } = new();
+    [BindProperty] public string FunctionURL { get; set; } = string.Empty;
 }

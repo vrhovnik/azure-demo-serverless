@@ -54,23 +54,17 @@
     <script type="application/javascript">
         document.addEventListener('DOMContentLoaded', function () {
              const connectionAlerts = new signalR.HubConnectionBuilder()
-                         .withUrl('/alerts')
-                         .configureLogging(signalR.LogLevel.Information)
-                         .withAutomaticReconnect()
+                         .withUrl(@Model.FunctionURL)
+                         .configureLogging(signalR.LogLevel.Information)                         
                          .build();
-             bindConnectionMessage(connectionAlerts);
+             
              connectionAlerts.start()
-                            .then(() => console.log('connected to alert messages!'))
+                            .then(() => console.log('connected to messages via SignalR!'))
                             .catch(console.error);
-             function bindConnectionMessage(connection) {
-                 let messageCallback = function (message) {
-                     $("#alertDiv").empty();
-                     if (!message) return;
-                     $("#alertDiv").append(message);
-                     $("#alertDiv").append("<br />");                     
-                 };
-                 connection.on('alertMessage', messageCallback);
-             }
+             
+             connection.on('newMessage', (message) => {
+                     document.getElementById("messages").innerHTML = message;
+                   });
          });
     </script>
 }

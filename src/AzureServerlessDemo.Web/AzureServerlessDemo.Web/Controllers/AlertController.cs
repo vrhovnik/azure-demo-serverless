@@ -35,14 +35,18 @@ public class AlertController : ControllerBase
             logger.LogInformation("Got events - check if validation code is present");
             foreach (var eventGridEvent in egEvents)
             {
-                if (eventGridEvent.TryGetSystemEventData(out object systemEvent) &&
-                    systemEvent is SubscriptionValidationEventData subscriptionValidated)
+                if (eventGridEvent.TryGetSystemEventData(out object eventData))
                 {
-                    logger.LogInformation("Validation code: " + subscriptionValidated.ValidationCode);
-                    var responseData =
-                        new SubscriptionValidationResponseData
-                            { ValidationResponse = subscriptionValidated.ValidationCode };
-                    return Ok(JsonConvert.SerializeObject(responseData));
+                    if (eventData is SubscriptionValidationEventData subscriptionValidationEventData)
+                    {
+                        logger.LogInformation($"Got SubscriptionValidation event data, validation code: {subscriptionValidationEventData.ValidationCode}, topic: {eventGridEvent.Topic}");
+
+                        var responseData = new SubscriptionValidationResponse
+                        {
+                            ValidationResponse = subscriptionValidationEventData.ValidationCode
+                        };
+                        return new OkObjectResult(responseData);
+                    }
                 }
             
                 logger.LogInformation("Reading data property " + eventGridEvent.Data);
