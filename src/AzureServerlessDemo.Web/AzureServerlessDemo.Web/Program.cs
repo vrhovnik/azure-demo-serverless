@@ -13,21 +13,18 @@ builder.Services.Configure<StorageOptions>(builder.Configuration.GetSection("Sto
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error");
-}
+if (!app.Environment.IsDevelopment()) app.UseExceptionHandler("/Error");
 
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapHealthChecks("/health").AllowAnonymous();
+    endpoints.MapHealthChecks("/health")
+        .AllowAnonymous();
     endpoints.MapRazorPages();
+    endpoints.MapControllers();
     endpoints.MapHub<AlertHub>("/alerts");
 });
 

@@ -19,6 +19,8 @@
     <PackageReference Include="Azure.Messaging.EventGrid" Version="4.7.0" />
     <PackageReference Include="Microsoft.Azure.SignalR" Version="1.13.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Htmx" Version="0.0.11" />
+    <PackageReference Include="Htmx.TagHelpers" Version="0.0.11" />
   </ItemGroup>
 
 </Project>

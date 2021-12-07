@@ -8,6 +8,9 @@
 @section breadcrumbs
 {
     <li>
+        <a asp-page="/Info/Index">Starting page</a>
+    </li>
+    <li>
         <a asp-page="/Triggers/Workflow">Triggers</a>
     </li>
     <li class="active">Logs from Azure tables</li>
@@ -15,35 +18,38 @@
 
 <h1>Logs from Azure Tables</h1>
 
-<div id="alertDiv"></div>
+<div class="container mt-2"
+     id="alertDiv">
+</div>
 
-@if (Model.Logs.Any())
-{
-    <table class="table table-hover">
-        <tr>
-            <th>ID</th>
-            <th>Text</th>
-            <th>Method</th>
-            <th>Date</th>
-        </tr>
-        @foreach (var currentLog in Model.Logs)
-        {
-            <tr>
-                <td>@currentLog.RowKey</td>
-                <td>@currentLog.Text</td>
-                <td>@currentLog.CalledFromMethod</td>
-                <td>@currentLog.LoggedDate</td>
-            </tr>
-        }
-    </table>
-}
-else
-{
-    <p class="text-info"> No data is present, check Azure Table storage connection!</p>
-}
+<div class="container">
+    <input aria-label="search term"
+           class="form-control"
+           hx-get
+           hx-indicator="#indicator"
+           hx-swap="outerHtml"
+           hx-target="#grid"
+           hx-trigger="keyup changed delay:300ms"
+           id="tbQuery"
+           name="query"
+           placeholder="enter search term"
+           type="text">
+</div>
+<div class="container mt-2">
+    <div id="grid">
+        @await Html.PartialAsync("_LogsList", Model.Logs)
+        <img alt="tail spin"
+             class="htmx-indicator"
+             id="indicator"
+             src="~/spinners/spinner.svg">
+    </div>
+</div>
 
 @section Scripts
 {
+    <script crossorigin="anonymous"
+            integrity="sha384-tvG/2mnCFmGQzYC1Oh3qxQ7CkQ9kMzYjWZSNtrRZygHPDDqottzEJsqS4oUVodhW"
+            src="https://unpkg.com/htmx.org@1.6.1"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.7/signalr.min.js"></script>
     <script type="application/javascript">
         document.addEventListener('DOMContentLoaded', function () {
