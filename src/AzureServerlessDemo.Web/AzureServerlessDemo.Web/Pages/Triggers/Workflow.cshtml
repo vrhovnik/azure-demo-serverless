@@ -8,14 +8,14 @@
 <h1>Workflow loaded</h1>
 
 <p>Click on below items to test out functionalities of trigger based serverless options</p>
-<div class="row row-cols-1 row-cols-md-2 g-4">
+<div class="row row-cols-3 row-cols-md-3 g-4">
     <div class="col">
-        <div class="card"
-             style="width: 18rem;">
+        <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Simple workflow</h5>
                 <p class="card-text">Send information about the usage to users</p>
                 <button class="btn btn-primary"
+                        hx-swap="innerHTML"
                         hx-get="@Model.SimpleWorkflowUrl">
                     Send information about the usage to users
                     <img alt="Spinner to showcase result in timely matter to get data"
@@ -29,12 +29,12 @@
         </div>
     </div>
     <div class="col">
-        <div class="card"
-             style="width: 18rem;">
+        <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Enhanced workflow</h5>
                 <p class="card-text">Send information about the usage to users with collectors</p>
                 <button class="btn btn-primary"
+                        hx-swap="innerHTML"
                         hx-get="@Model.EnhancedWorkflowUrl">
                     Send information about the usage to users
                     <img alt="Spinner to showcase result in timely matter to get data"
@@ -48,12 +48,12 @@
         </div>
     </div>
     <div class="col">
-        <div class="card"
-             style="width: 18rem;">
+        <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Tighter integration</h5>
                 <p class="card-text">Tighter integration with services</p>
                 <button class="btn btn-primary"
+                        hx-swap="innerHTML"
                         hx-get="@Model.TighterIntegration">
                     Show tighter integration with different services
                     <img alt="Spinner to showcase result in timely matter to get data"
@@ -64,7 +64,7 @@
             <div class="card-footer">
                 <small class="text-muted">Function URL: @Model.TighterIntegration</small>
                 <br/>
-                <a asp-page="/Triggers/Logs">Check logs <span class="glyphicon-class">glyphicon glyphicon-list-alt</span></a>
+                <a asp-page="/Triggers/Logs">Check logs </a><i class="fas fa-clipboard-list"></i>
             </div>
         </div>
     </div>

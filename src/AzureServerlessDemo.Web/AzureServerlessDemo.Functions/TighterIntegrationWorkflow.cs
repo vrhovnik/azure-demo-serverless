@@ -42,8 +42,6 @@ public static class TighterIntegrationWorkflow
 
             var logItem = new LogModel
             {
-                PartitionKey = "logs",
-                RowKey = Guid.NewGuid().ToString(),
                 Text = $"Calling tighter integration workflow with {message}",
                 CalledFromMethod = "TighterIntegrationWorkflow",
                 LoggedDate = DateTime.Now
