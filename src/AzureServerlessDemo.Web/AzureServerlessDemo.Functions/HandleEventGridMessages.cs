@@ -35,7 +35,7 @@ public static class HandleEventGridMessages
 
     [FunctionName("negotiate")]
     public static SignalRConnectionInfo Negotiate(
-        [HttpTrigger(AuthorizationLevel.Anonymous)]
+        [HttpTrigger(AuthorizationLevel.Anonymous, Route = "negotiate")]
         HttpRequest req,
         [SignalRConnectionInfo(HubName = "serverlessSample")]
         SignalRConnectionInfo connectionInfo) => connectionInfo;
