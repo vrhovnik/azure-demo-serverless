@@ -62,7 +62,7 @@
                             .then(() => console.log('connected to messages via SignalR!'))
                             .catch(console.error);
              
-             connection.on('newMessage', (message) => {
+             connectionAlerts.on('newMessage', (message) => {
                      document.getElementById("alertDiv").innerHTML = message;
                    });
          });
