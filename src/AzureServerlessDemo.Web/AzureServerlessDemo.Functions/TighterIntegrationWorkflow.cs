@@ -40,11 +40,12 @@ public static class TighterIntegrationWorkflow
 
             log.LogInformation("Addding data to Azure Tables for log purposes");
 
+            var currentMessage = $"Calling tighter integration workflow with {message} at {DateTime.Now}";
             var logItem = new LogTableModel
             {
                 PartitionKey = "serverlesslogs",
                 RowKey = Guid.NewGuid().ToString(),
-                Text = $"Calling tighter integration workflow with {message}",
+                Text = currentMessage,
                 CalledFromMethod = "TighterIntegrationWorkflow",
                 LoggedDate = DateTime.Now
             };
@@ -52,7 +53,7 @@ public static class TighterIntegrationWorkflow
             await tableCollector.AddAsync(logItem); //add to logs for future review
 
             //add to all subscribers to seen information via action
-            await eventCollector.AddAsync(new EventGridEvent("Tighter integration", "TigtherIntegration",
+            await eventCollector.AddAsync(new EventGridEvent(currentMessage, "TigtherIntegration",
                 "1.0.0", logItem));
 
             stopwatch.Stop();
