@@ -1,10 +1,8 @@
 ﻿using Azure.Messaging.EventGrid;
 using Azure.Messaging.EventGrid.SystemEvents;
 using AzureServerlessDemo.Web.Hubs;
-using AzureServerlessDemo.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Newtonsoft.Json;
 
 namespace AzureServerlessDemo.Web.Controllers;
 
@@ -35,7 +33,7 @@ public class AlertController : ControllerBase
             logger.LogInformation("Got events - check if validation code is present");
             foreach (var eventGridEvent in egEvents)
             {
-                if (eventGridEvent.TryGetSystemEventData(out object eventData))
+                if (eventGridEvent.TryGetSystemEventData(out var eventData))
                 {
                     if (eventData is SubscriptionValidationEventData subscriptionValidationEventData)
                     {
@@ -45,6 +43,8 @@ public class AlertController : ControllerBase
                         {
                             ValidationResponse = subscriptionValidationEventData.ValidationCode
                         };
+                        
+                        logger.LogInformation("Returning to the requestor....");
                         return new OkObjectResult(responseData);
                     }
                 }
