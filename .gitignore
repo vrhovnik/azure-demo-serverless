@@ -348,3 +348,5 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/src/AzureServerlessDemo.Web/.idea/.idea.AzureServerlessDemo.Web/.idea
+/src/AzureServerlessDemo.Web/AzureServerlessDemo.Functions/Properties/ServiceDependencies/azure-demo-serverless - Zip Deploy/profile.arm.json

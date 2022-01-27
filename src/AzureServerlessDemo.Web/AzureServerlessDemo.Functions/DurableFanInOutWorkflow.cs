@@ -28,47 +28,73 @@ public class DurableFanInOutWorkflow
     {
         log.LogInformation("Calling fan in and out");
         currentBlobDirectory = blobDirectory;
+
+        if (string.IsNullOrEmpty(currentBlobDirectory)) currentBlobDirectory = "durableblobs";
+        
         var result = await starter.StartNewAsync("DoCalculationsFun", blobDirectory);
-        return new OkObjectResult("All files sizes: " + result);
+        
+        string info = $"Received result {result} for directory {blobDirectory}";
+        log.LogInformation(info);        
+        return new OkObjectResult(info);
     }
 
     [FunctionName("DoCalculationsFun")]
-    public async Task<int> DoCalculationsFun([OrchestrationTrigger] IDurableOrchestrationContext activityContext, 
-        CancellationToken ctk)
+    public async Task<int> DoCalculationsFun([OrchestrationTrigger] IDurableOrchestrationContext activityContext,
+        CancellationToken ctk, ILogger log)
     {
         var directoryName = activityContext.GetInput<string>();
-        
+
+        if (string.IsNullOrEmpty(directoryName)) directoryName = "durableblobs";
+
+        log.LogInformation("Current directory name is: " + directoryName);
+
         var parralelTasks = new List<Task<int>>();
-        
-        var blobNames = await activityContext.CallActivityAsync<string[]>("GetBlobNames",directoryName);
+
+        var blobNames = await activityContext.CallActivityAsync<string[]>("GetBlobNames", directoryName);
 
         foreach (var currentBlobName in blobNames)
         {
+            log.LogInformation($"Adding calculation for {currentBlobName}");
             var task = activityContext.CallActivityAsync<int>("CalculateSize", currentBlobName);
             parralelTasks.Add(task);
         }
 
         await Task.WhenAll(parralelTasks);
-        return parralelTasks.Sum(currentBlobSize => currentBlobSize.Result);
+
+        log.LogInformation($"Task were finished, results get calculated for {parralelTasks.Count} blobs");
+
+        int size = parralelTasks.Sum(currentBlobSize => currentBlobSize.GetAwaiter().GetResult());
+
+        log.LogInformation($"Line size is {size}");
+
+        return size;
     }
-    
+
     [FunctionName("GetBlobNames")]
-    public async Task<string[]> GetBlobNames([ActivityTrigger]string blobDirName, ILogger log)
+    public async Task<string[]> GetBlobNames([ActivityTrigger] string blobDirName, ILogger log)
     {
+        if (string.IsNullOrEmpty(blobDirName)) blobDirName = "durableblobs";
+
         log.LogInformation($"Getting blob names from container {blobDirName}");
-        
-        var azureStorageHelper = new AzureStorageHelper(storageConnectionString, 
+
+        var azureStorageHelper = new AzureStorageHelper(storageConnectionString,
             blobDirName);
         var blobs = await azureStorageHelper.GetBlobsAsync();
+        log.LogInformation($"Received {blobs.Count} blobs for calculation.");
         return blobs.ToArray();
     }
-    
+
     [FunctionName("CalculateSize")]
-    public async Task<int> CalculateSize([ActivityTrigger]string blobName, ILogger log)
+    public async Task<int> CalculateSize([ActivityTrigger] string blobName, ILogger log)
     {
         log.LogInformation($"Getting blob {blobName} and reading lines of files");
-        var azureStorageHelper = new AzureStorageHelper(storageConnectionString, 
+        
+        if (string.IsNullOrEmpty(currentBlobDirectory)) currentBlobDirectory = "durableblobs";
+        
+        var azureStorageHelper = new AzureStorageHelper(storageConnectionString,
             currentBlobDirectory);
+
+        log.LogInformation($"Gettig info about number of lines for {blobName}");
         
         return await azureStorageHelper.NumberOfLinesInBlobAsync(blobName);
     }
