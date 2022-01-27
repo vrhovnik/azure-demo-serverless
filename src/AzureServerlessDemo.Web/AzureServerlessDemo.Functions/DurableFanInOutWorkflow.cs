@@ -33,7 +33,7 @@ public class DurableFanInOutWorkflow
     }
 
     [FunctionName("DoCalculationsFun")]
-    public async Task<int> DoCalculationsFun([ActivityTrigger] IDurableOrchestrationContext activityContext, 
+    public async Task<int> DoCalculationsFun([OrchestrationTrigger] IDurableOrchestrationContext activityContext, 
         CancellationToken ctk)
     {
         var directoryName = activityContext.GetInput<string>();
