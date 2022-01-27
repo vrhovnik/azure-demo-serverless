@@ -32,10 +32,21 @@ public class DurableFanInOutWorkflow
         if (string.IsNullOrEmpty(currentBlobDirectory)) currentBlobDirectory = "durableblobs";
         
         var result = await starter.StartNewAsync("DoCalculationsFun", blobDirectory);
-        
-        string info = $"Received result {result} for directory {blobDirectory}";
-        log.LogInformation(info);        
-        return new OkObjectResult(info);
+             
+        var status = await starter.GetStatusAsync(result);
+        do
+        {
+            //do long pooling, but we have other means as well
+            log.LogInformation($"Checking status in 3 seconds, current status {status.RuntimeStatus}");
+            await Task.Delay(TimeSpan.FromSeconds(3));
+            status = await starter.GetStatusAsync(result);
+        }
+        while (status.RuntimeStatus != OrchestrationRuntimeStatus.Completed);
+
+        log.LogInformation("Result is finished");
+
+        var output = status.Output;              
+        return new OkObjectResult(output);
     }
 
     [FunctionName("DoCalculationsFun")]
